@@ -65,12 +65,14 @@ Connect the INMP441 I2S Microphone to the STM32F411CEU6 as follows:
 
 ## 📈 Results and Discussion
 
-In test mode, the generated signal contains a low-frequency component and a high-frequency component. After FIR filtering, the high-frequency component near the Nyquist region is attenuated, while the lower-frequency component is perfectly preserved. 
+**Test Mode (Algorithm Verification):**
+Generating acoustic signals above 20 kHz in a real-world environment to test the microphone is practically challenging. To overcome this, a synthetic test signal containing both low-frequency and high-frequency (>20 kHz) components was generated and injected directly into the STM32 processing pipeline. As seen in the FFT spectrum before and after, the >20 kHz noise near the Nyquist region is successfully attenuated by the hardware FIR filter, proving the algorithmic correctness.
 
-In microphone mode, the filter effectively reduces high-frequency environmental noise, resulting in a significantly smoother waveform in the time domain.
+**Microphone Mode (Real-World Operation):**
+When capturing actual audio from the I2S microphone, the filter effectively removes high-frequency environmental noise, resulting in a significantly smoother waveform in the time domain without distorting the audible frequencies.
 
 - **Time Domain Analysis:** [View Image](docs/images/matlab_time_domain.png)
-- **FFT Spectrum (Before & After):** [View Image](docs/images/matlab_fft_before_after.png)
+- **FFT Spectrum (Test Mode - Before & After):** [View Image](docs/images/matlab_fft_before_after.png)
 - **Frequency Response:** [View Image](docs/images/fir_frequency_response.png)
 
 *(Note: Please upload the actual screenshots to `docs/images/` to see the results here).*

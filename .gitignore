@@ -1,0 +1,13 @@
+# STM32
+STM32F411CEU6/Debug/
+STM32F411CEU6/Release/
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.log
+.metadata/
+
+# MATLAB
+*.asv

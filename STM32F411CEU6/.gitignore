@@ -1,0 +1,16 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# Build directory
+Debug/
+Release/
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.log
+
+# IDE generated files
+.metadata/

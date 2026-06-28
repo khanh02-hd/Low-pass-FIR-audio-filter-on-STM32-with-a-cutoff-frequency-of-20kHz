@@ -1,11 +1,11 @@
-# Real-Time FIR Audio Filtering on STM32F411 Using I2S DMA and USB CDC
+# Real-Time Low-Pass FIR Audio Filter on STM32
 
 ![STM32](https://img.shields.io/badge/STM32-F411CEU6-blue.svg)
 ![DSP](https://img.shields.io/badge/DSP-FIR%20Filter-green.svg)
 ![MATLAB](https://img.shields.io/badge/MATLAB-Visualization-orange.svg)
 ![License](https://img.shields.io/badge/License-MIT-purple.svg)
 
-This repository contains a complete Digital Signal Processing (DSP) project implementing a **Real-Time Low-Pass FIR (Finite Impulse Response) Filter** on the STM32F411CEU6 microcontroller. The system captures audio from an I2S microphone, filters it using a 51-tap FIR algorithm, and transmits the data to a PC via USB CDC for real-time visualization in MATLAB.
+This project implements a real-time FIR low-pass audio filter on the STM32F411CEU6 microcontroller. Audio data is captured from an I2S microphone using DMA, processed with a 51-tap FIR filter, and sent to a PC through USB CDC. MATLAB scripts are provided to display the raw and filtered signals in both the time and frequency domains.
 
 ## 📊 System Architecture
 
@@ -20,6 +20,24 @@ flowchart TD
 ```
 
 *(Alternatively, see the [System Block Diagram](docs/images/system_block_diagram.png))*
+
+## 🌟 Key Features
+
+- **DMA-Based Audio Sampling:** Captures audio data from an I2S microphone using continuous DMA buffers.
+- **FIR Filter:** Implements a 51-tap Low-Pass FIR filter designed via the Window Method in MATLAB.
+- **USB CDC Data Transfer:** Groups processed data into buffers before transmission to reduce USB transmission overhead.
+- **Dual Operating Modes:**
+  - `MODE_MIC`: Processes real acoustic data from the I2S microphone.
+  - `MODE_TEST`: Generates an internal simulated waveform for algorithm verification.
+- **MATLAB Integration:** MATLAB scripts to receive USB data, compute the Fast Fourier Transform (FFT), and visualize both raw and filtered signals.
+
+## 📂 Repository Structure
+
+- `STM32F411CEU6/`: The STM32CubeIDE project containing the C source code, HAL drivers, USB device library, and hardware configuration (`.ioc`).
+  - `Core/Src/main.c`: Main application code, including FIR convolution, I2S/DMA setup, and USB CDC data handling.
+- `MATLAB/`: MATLAB scripts for data visualization and filter design.
+  - `firfft.m`: Calculates filter coefficients.
+  - `mode_mic.m` / `mode_test.m`: Reads USB serial data from the STM32 and plots real-time waveforms and FFT spectrum.
 
 ## ⚙️ Filter Specifications
 
@@ -75,23 +93,21 @@ When capturing actual audio from the I2S microphone, the filter effectively remo
 - **FFT Spectrum (Test Mode - Before & After):** [View Image](docs/images/matlab_fft_before_after.png)
 - **Frequency Response:** [View Image](docs/images/fir_frequency_response.png)
 
-*(Note: Please upload the actual screenshots to `docs/images/` to see the results here).*
-
 ## ⚠️ Limitations
 
-- The 20 kHz cutoff is very close to the Nyquist frequency at a 48 kHz sampling rate, which results in a relatively narrow transition band.
+- The 20 kHz cutoff is close to the Nyquist frequency at a 48 kHz sampling rate, which results in a relatively narrow transition band.
 - A 51-tap FIR filter provides moderate attenuation but does not yield a completely sharp cutoff.
-- USB CDC is currently utilized for data batching and visualization purposes, not for high-fidelity audio playback.
-- The scope of this project is heavily focused on real-time signal analysis and visualization rather than audio output to an I2S DAC or speaker.
+- USB CDC is currently utilized for data transmission and visualization purposes, not for high-fidelity audio playback.
+- The scope of this project focuses on real-time signal analysis and visualization rather than audio output to an I2S DAC or speaker.
 
 ## 🔮 Future Work
 
-- Compare different FIR lengths (e.g., 31, 51, 101 taps) to analyze the trade-off between attenuation sharpness and computational latency.
+- Compare different FIR lengths (e.g., 31, 51, 101 taps) to analyze the trade-off between attenuation sharpness and computational cost.
 - Add Band-Pass and High-Pass filter modes.
 - Implement real-time audio playback by routing the filtered signal to an I2S DAC.
 - Measure and document precise CPU usage and processing latency.
 - Implement a Fixed-Point FIR algorithm to reduce computational overhead.
-- Compare manual FIR Convolution with the optimized `CMSIS-DSP` FIR functions.
+- Compare manual FIR Convolution with the CMSIS-DSP FIR implementation.
 
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
